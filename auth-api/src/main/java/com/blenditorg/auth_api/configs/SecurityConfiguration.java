@@ -30,6 +30,9 @@ public class SecurityConfiguration {
 
 	public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
 			AuthenticationProvider authenticationProvider) {
+		
+		System.out.println("[debug] SecurityConfiguration() Constructor called.");
+		
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 		this.authenticationProvider = authenticationProvider;
 	}
@@ -78,7 +81,6 @@ public class SecurityConfiguration {
 	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 		http.csrf((csrf) -> csrf.disable())
 				.cors(Customizer.withDefaults())
 				.authorizeHttpRequests((authorizeHttpRequests) -> 
@@ -92,6 +94,9 @@ public class SecurityConfiguration {
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		
+		System.out.println("[debug] SecurityConfiguration::securityFilterChain() ");
+		
 		return http.build();
 	}
 	
@@ -105,6 +110,8 @@ public class SecurityConfiguration {
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
+		
+		System.out.println("[debug] SecurityConfiguration::corsConfigurationSource() " + source);
 		
 		return source;
 	}

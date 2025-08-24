@@ -17,6 +17,7 @@ public class ApplicationConfiguration {
 	private final UserRepository userRepository;
 	
 	public ApplicationConfiguration(UserRepository userRepository) {
+		System.out.println("[debug] ApplicationConfiguration( UserRepository ) constructor called");
 		this.userRepository = userRepository;
 	}
 	/**
@@ -35,6 +36,7 @@ public class ApplicationConfiguration {
 	 */
 	@Bean
 	UserDetailsService userDetailsService() {
+		System.out.println("[debug] ApplicationConfiguration::userDetailsService()");
 		return username -> userRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
@@ -44,8 +46,16 @@ public class ApplicationConfiguration {
 		return new BCryptPasswordEncoder();
 	}
 	
+	/**
+	 * Loops through all Authentication Providers and tries to authenticate
+	 * @param config
+	 * @return
+	 * @throws Exception
+	 */
+	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		System.out.println("[debug] ApplicationConfiguration::authenticationManager(AuthenticaitonConfiguration config)");
 		return config.getAuthenticationManager();
 	}
 	
@@ -58,6 +68,7 @@ public class ApplicationConfiguration {
 	 */
 	@Bean
 	AuthenticationProvider authenticationProvider() {
+		System.out.println("[debug] ApplicationConfiguration::authenticationProvider()");
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
 		
