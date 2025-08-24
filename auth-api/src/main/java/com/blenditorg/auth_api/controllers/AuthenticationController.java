@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blenditorg.auth_api.dtos.LoginUserDto;
 import com.blenditorg.auth_api.dtos.RegisterUserDto;
 import com.blenditorg.auth_api.entities.User;
-import com.blenditorg.auth_api.repositories.UserRepository;
 import com.blenditorg.auth_api.responses.LoginResponse;
 import com.blenditorg.auth_api.services.AuthenticationService;
 import com.blenditorg.auth_api.services.JwtService;
@@ -25,16 +24,12 @@ public class AuthenticationController {
 	
 	private final AuthenticationService authenticationService;
 	
-	private final UserRepository userRepository;
-	
 	public AuthenticationController(
 			JwtService jwtService, 
-			AuthenticationService authenticationService,
-			UserRepository userRepository
+			AuthenticationService authenticationService
 			) {
 		this.authenticationService = authenticationService;
 		this.jwtService = jwtService;
-		this.userRepository = userRepository;
 	}
 	
 	@PostMapping("/signup")
