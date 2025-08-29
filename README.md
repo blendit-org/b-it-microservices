@@ -16,7 +16,7 @@ Register a new user account.
 #### Request Body Example:
 ```json
 {
-  "fullName": "John Doe",
+  "userId": "John123",
   "email": "johndoe@example.com",
   "password": "StrongPassword123"
 }
@@ -25,7 +25,7 @@ Register a new user account.
 #### Response:
 ```json
 {
-  "userId": "123e4567-e89b-12d3-a456-426614174000",
+  "userId": "John123",
   "fullName": "John Doe",
   "email": "johndoe@example.com",
   "password": "hashed-password",
@@ -84,7 +84,7 @@ Authorization: Bearer <token>
 #### Response:
 ```json
 {
-  "userId": "123e4567-e89b-12d3-a456-426614174000",
+  "userId": "John123",
   "fullName": "John Doe",
   "email": "johndoe@example.com",
   "password": "hashed-password",
@@ -114,7 +114,7 @@ Authorization: Bearer <token>
 ```json
 [
   {
-    "userId": "123e4567-e89b-12d3-a456-426614174000",
+    "userId": "John123",
     "fullName": "John Doe",
     "email": "johndoe@example.com",
     "password": "hashed-password",
@@ -122,7 +122,7 @@ Authorization: Bearer <token>
     "updatedAt": "2025-08-29T10:15:30Z"
   },
   {
-    "userId": "987e6543-e21b-65d3-a456-426614174999",
+    "userId": "Jane456",
     "fullName": "Jane Smith",
     "email": "janesmith@example.com",
     "password": "hashed-password",
@@ -131,3 +131,4 @@ Authorization: Bearer <token>
   }
 ]
 ```
+
