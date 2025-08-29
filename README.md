@@ -18,7 +18,8 @@ Register a new user account.
 {
   "userId": "John123",
   "email": "johndoe@example.com",
-  "password": "StrongPassword123"
+  "password": "StrongPassword123",
+  "fullName: "John Doe"
 }
 ```
 
@@ -131,4 +132,5 @@ Authorization: Bearer <token>
   }
 ]
 ```
+
 
