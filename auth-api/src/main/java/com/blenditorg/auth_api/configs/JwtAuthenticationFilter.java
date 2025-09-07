@@ -32,6 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			UserDetailsService userDetailsService,
 			HandlerExceptionResolver handlerExceptionResolver
 			) {
+		
+		System.out.println("[debug] JwtAuthenticationFilter() constructor called");
+		
 		this.jwtService = jwtService;
 		this.userDetailsService = userDetailsService;
 		this.handlerExceptionResolver = handlerExceptionResolver;
@@ -85,6 +88,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			// check if the token is already authorized. If true then skip to filterChain
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
+            
+            System.out.println("[debug] authentication = SecurityContextHolder.getContext().getAuthentication() " + authentication);
 
             if (email != null && authentication == null) {
             	// Load userDetails which belongs to the particular email from Database

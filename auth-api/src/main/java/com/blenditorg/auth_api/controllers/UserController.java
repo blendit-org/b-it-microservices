@@ -23,6 +23,9 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<User> authenticatedUser() {
+    	
+    	System.out.println("[debug] /users/me");
+    	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
@@ -32,6 +35,9 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<List<User>> allUsers() {
+    	
+    	System.out.println("[debug] /users/");
+    	
         List <User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);

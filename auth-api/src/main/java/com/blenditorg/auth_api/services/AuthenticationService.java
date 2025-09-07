@@ -25,6 +25,9 @@ public class AuthenticationService {
 			AuthenticationManager authenticationManager,
 			PasswordEncoder passwordEncoder
 	) {
+		
+		System.out.println("[debug] AuthenticationService() constructor called");
+		
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -36,8 +39,15 @@ public class AuthenticationService {
 		user.setEmail(input.getEmail());
 		user.setPassword(passwordEncoder.encode(input.getPassword()));
 		
+		System.out.println("[debug] AuthenticationService::signup(ResgisterUserDto input)");
+		
 		if (userRepository.existsById(input.getUserId())) {
-			throw new UsernameAlreadyExists("This username " + input.getUserId() + " already exists");
+			throw new UsernameAlreadyExists("This user id " + input.getUserId() + " already exists");
+		}
+		
+		// This is slow maybe <-----------------------------------------------------------------------------------------------[check]
+		if (!userRepository.findByEmail(input.getEmail()).isEmpty()) {
+			throw new UsernameAlreadyExists("This email " + input.getEmail() + " already exists");
 		}
 		
 		user.setUserId(input.getUserId());

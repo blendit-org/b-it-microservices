@@ -1,5 +1,8 @@
 package com.blenditorg.auth_api.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +24,19 @@ public class AuthenticationController {
 	
 	private final AuthenticationService authenticationService;
 	
-	public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
+	public AuthenticationController(
+			JwtService jwtService, 
+			AuthenticationService authenticationService
+			) {
 		this.authenticationService = authenticationService;
 		this.jwtService = jwtService;
 	}
 	
 	@PostMapping("/signup")
 	public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+		
+		System.out.println("[debug] /auth/signup");
+		
 		User registeredUser = authenticationService.signup(registerUserDto);
 		
 		return ResponseEntity.ok(registeredUser);
@@ -35,9 +44,17 @@ public class AuthenticationController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+		
+		System.out.println("[debug] /auth/login");
+		
 		User authenticatedUser = authenticationService.authenticate(loginUserDto);
 		
-		String jwtToken = jwtService.generateToken(authenticatedUser);
+		// Building JWT token with email and userId information
+		Map<String, Object> extraClaims = new HashMap<>();
+		extraClaims.put("userId", authenticatedUser.getUserId());
+		
+		
+		String jwtToken = jwtService.generateToken(extraClaims, authenticatedUser);
 		System.out.println(jwtService.extractUsername(jwtToken));
 		
 		LoginResponse loginResponse = new LoginResponse();
