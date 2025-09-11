@@ -32,7 +32,7 @@ public class FileRegisterService {
 		projectFile.setStartFrame(fileUploadDto.getStartFrame());
 		projectFile.setEndFrame(fileUploadDto.getEndFrame());
 		projectFile.setBucketName(bucketName);
-		projectFile.setObjectPath(userId + "_" + UUID.randomUUID() + "_" + projectFile.getFileName());
+		projectFile.setObjectPath(UUID.randomUUID() + "_" + projectFile.getFileName());
 		
 		System.out.println("registerFileUnderUserId(): userId -> " + projectFile + " " + projectFile.getProjectId());
 		

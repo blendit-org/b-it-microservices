@@ -12,6 +12,7 @@ import com.blenditorg.projectFileManager.dtos.FileUploadDto;
 import com.blenditorg.projectFileManager.entities.ProjectFile;
 import com.blenditorg.projectFileManager.services.FileRegisterService;
 import com.blenditorg.projectFileManager.services.FileService;
+import com.blenditorg.projectFileManager.services.ProjectJobPublisher;
 import com.google.cloud.storage.HttpMethod;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +24,12 @@ public class FileController {
 	
 	private final FileService fileService;
 	private final FileRegisterService fileRegisterService;
+	private final ProjectJobPublisher projectJobPublisher;
 	
-	public FileController(FileService fileService, FileRegisterService fileRegisterService) {
+	public FileController(FileService fileService, FileRegisterService fileRegisterService, ProjectJobPublisher projectJobPublisher) {
 		this.fileService = fileService;
 		this.fileRegisterService = fileRegisterService;
+		this.projectJobPublisher = projectJobPublisher;
 	}
 	
 	@PostMapping("/upload")
@@ -37,9 +40,11 @@ public class FileController {
 		String userId = (String) request.getAttribute("userId");
 		
 		ProjectFile projectFile = fileRegisterService.registerFileUnderUserId(fileUploadDto, userId);
-		String objectPathName = projectFile.getObjectPath();
+		String objectPathName = projectFile.getUserId() + "/" + projectFile.getProjectId() + "/" + projectFile.getObjectPath();
 		
 		String url = fileService.generatePreSignedUrl(objectPathName, HttpMethod.PUT);
+		
+		projectJobPublisher.enqueueProject(projectFile.getProjectId(), projectFile.getUserId(), projectFile.getObjectPath() , projectFile.getStartFrame(), projectFile.getEndFrame());
 				
 		return ResponseEntity.ok(Map.of("url", url, "file", objectPathName));
 	}
