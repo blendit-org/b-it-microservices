@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.blenditorg.auth_api.dtos.RegisterUserDto;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -117,6 +119,21 @@ public class JwtService {
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))
+				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
+				.compact();
+	}
+	
+	public String buildEmailToken(RegisterUserDto registerUserDto) {
+		Map<String, Object> waitingUser = Map.of(
+				"userId", registerUserDto.getUserId(),
+				"password", registerUserDto.getPassword(),
+				"fullName", registerUserDto.getFullName());
+		return Jwts
+				.builder()
+				.setClaims(waitingUser)
+				.setSubject(registerUserDto.getEmail())
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + 15*60*1000))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
 				.compact();
 	}

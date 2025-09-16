@@ -64,7 +64,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			) throws ServletException, IOException {
 		final String authHeader = request.getHeader("Authorization"); // retrieve the header "Authorization"
 		
+		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			response.setStatus(HttpServletResponse.SC_OK);
+			return;
+		}
+		
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			System.out.println("[debug] first filter chain: no Bearer token");
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -84,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			 */
 			final String jwt = authHeader.substring(7);
 			final String email = jwtService.extractUsername(jwt); // extract email from JWT token
-			System.out.println(email);
+			System.out.println(authHeader);
 
 			// check if the token is already authorized. If true then skip to filterChain
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
@@ -112,7 +118,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
+            System.out.println("[debug] second filter chain");
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);

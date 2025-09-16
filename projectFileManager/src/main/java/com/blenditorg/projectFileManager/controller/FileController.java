@@ -38,6 +38,8 @@ public class FileController {
 			HttpServletRequest request) {
 
 		String userId = (String) request.getAttribute("userId");
+		System.out.println("[fileUploadDto] " + fileUploadDto.getFileName() + " " + fileUploadDto.getStartFrame()+ " " + fileUploadDto.getEndFrame());
+		
 		
 		ProjectFile projectFile = fileRegisterService.registerFileUnderUserId(fileUploadDto, userId);
 		String objectPathName = projectFile.getUserId() + "/" + projectFile.getProjectId() + "/" + projectFile.getObjectPath();
