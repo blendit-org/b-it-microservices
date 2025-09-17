@@ -3,6 +3,7 @@ package com.blenditorg.auth_api.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,9 @@ import com.blenditorg.auth_api.entities.User;
 import com.blenditorg.auth_api.responses.LoginResponse;
 import com.blenditorg.auth_api.services.AuthenticationService;
 import com.blenditorg.auth_api.services.JwtService;
+import com.blenditorg.auth_api.services.MailService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RequestMapping("/auth")
 @RestController
@@ -24,6 +28,8 @@ public class AuthenticationController {
 	
 	private final AuthenticationService authenticationService;
 	
+	//private final MailService mailService;
+	
 	public AuthenticationController(
 			JwtService jwtService, 
 			AuthenticationService authenticationService
@@ -32,10 +38,22 @@ public class AuthenticationController {
 		this.jwtService = jwtService;
 	}
 	
+//	@PostMapping("/signup")
+//	public ResponseEntity<Map<String, Object>> signup(@RequestBody RegisterUserDto registerUserDto) {
+//		System.out.println("[debug] /auth/signup");
+//		
+//		String emailAuthToken = jwtService.buildEmailToken(registerUserDto);
+//		String url = "http://localhost:8005";
+//		
+//		return ResponseEntity.ok(Map.of(
+//				"message", "There is a link sent to your email. Click it to verify"));
+//		
+//	}
+	
 	@PostMapping("/signup")
 	public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
 		
-		System.out.println("[debug] /auth/signup");
+		System.out.println("[debug] /auth/signup/email-verification");
 		
 		User registeredUser = authenticationService.signup(registerUserDto);
 		
@@ -49,6 +67,11 @@ public class AuthenticationController {
 		
 		User authenticatedUser = authenticationService.authenticate(loginUserDto);
 		
+		// user needs to be email verified
+//		if (!authenticatedUser.isVerified()) {
+//			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//		}
+//		
 		// Building JWT token with email and userId information
 		Map<String, Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", authenticatedUser.getUserId());
@@ -63,4 +86,18 @@ public class AuthenticationController {
 		
 		return ResponseEntity.ok(loginResponse);
 	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		System.out.println("[logout] "+ token);
+		// blacklist token
+		
+		return ResponseEntity.ok("Logged out successfully");
+	}
+	
+//	@PostMapping("/verify")
+//	public ResponseEntity<Map<String, Object>> verifyEmail(@RequestBody LoginUserDto loginUserDto) {
+//		
+//	}
 }

@@ -66,6 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String token = authHeader.substring(7);
 			if (!jwtService.isTokenValid(token)) {			
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
 			}
 			
 			String userId = jwtService.extractAllClaims(token).get("userId", String.class);

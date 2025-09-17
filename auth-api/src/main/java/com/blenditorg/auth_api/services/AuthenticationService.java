@@ -38,6 +38,7 @@ public class AuthenticationService {
 		user.setFullName(input.getFullName());
 		user.setEmail(input.getEmail());
 		user.setPassword(passwordEncoder.encode(input.getPassword()));
+		// user.setVerified(false);
 		
 		System.out.println("[debug] AuthenticationService::signup(ResgisterUserDto input)");
 		

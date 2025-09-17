@@ -1,5 +1,7 @@
 package com.blenditorg.projectFileManager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,9 +23,11 @@ public class ProjectFile {
 	@Column(name = "fileName")
 	private String fileName;
 	
+	@JsonIgnore
 	@Column(nullable = false)
 	private String bucketName;
 	
+	@JsonIgnore
 	@Column(nullable = false)
 	private String objectPath;
 	

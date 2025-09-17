@@ -34,8 +34,11 @@ public class FileRegisterService {
 		projectFile.setBucketName(bucketName);
 		projectFile.setObjectPath(UUID.randomUUID() + "_" + projectFile.getFileName());
 		
-		System.out.println("registerFileUnderUserId(): userId -> " + projectFile + " " + projectFile.getProjectId());
+		System.out.println("registerFileUnderUserId(): userId -> " + projectFile.getBucketName() + " " + projectFile.getProjectId());
 		
-		return fileRepository.save(projectFile);
+		ProjectFile savedFile = fileRepository.save(projectFile);
+		System.out.println("[file] " + savedFile.getFileName() + " " + savedFile.getObjectPath());
+		
+		return savedFile;
 	}
 }
