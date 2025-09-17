@@ -1,4 +1,4 @@
-package com.blenditorg.projectFileManager.entities;
+package com.blenditorg.projectStatusUpdate.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
