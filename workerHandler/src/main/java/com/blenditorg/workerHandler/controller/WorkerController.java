@@ -1,6 +1,7 @@
 package com.blenditorg.workerHandler.controller;
 
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blenditorg.workerHandler.configurations.RabbitConfig;
+import com.blenditorg.workerHandler.dtos.FrameMessage;
 import com.blenditorg.workerHandler.dtos.JobFileMetadata;
 import com.blenditorg.workerHandler.entities.ProjectAndFrame;
 import com.blenditorg.workerHandler.services.FileService;
@@ -142,6 +144,7 @@ public class WorkerController {
 		
 		// update the job as done...
 		projectAndFrameService.updateRenderedStatusToTrue(jobId);
+		projectAndFrameService.sendRenderStats(new FrameMessage(LocalDate.now()));
 		return ResponseEntity.ok("Job Uploaded Successfully");
 	}
 	
