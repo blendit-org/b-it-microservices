@@ -2,8 +2,11 @@ package com.blenditorg.workerHandler.services;
 
 import java.util.Optional;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
+import com.blenditorg.workerHandler.configurations.RabbitConfig;
+import com.blenditorg.workerHandler.dtos.FrameMessage;
 import com.blenditorg.workerHandler.entities.ProjectAndFrame;
 import com.blenditorg.workerHandler.repositories.ActiveProjects;
 
@@ -11,10 +14,12 @@ import com.blenditorg.workerHandler.repositories.ActiveProjects;
 public class ProjectAndFrameService {
 	
 	private final ActiveProjects activeProjects;
+	private final AmqpTemplate amqpTemplate;
 
-	public ProjectAndFrameService(ActiveProjects activeProjects) {
+	public ProjectAndFrameService(ActiveProjects activeProjects, AmqpTemplate amqpTemplate) {
 		super();
 		this.activeProjects = activeProjects;
+		this.amqpTemplate = amqpTemplate;
 	}
 	
 	public ProjectAndFrame registerNewProjectAndFrame(Long projectId, Integer frame) {
@@ -64,5 +69,9 @@ public class ProjectAndFrameService {
 			return activeProjects.save(updateThisJob);
 		}
 		return null;
+	}
+	
+	public void sendRenderStats(FrameMessage msg) {
+		amqpTemplate.convertAndSend(RabbitConfig.RENDER_STATS_QUEUE, msg);
 	}
 }
