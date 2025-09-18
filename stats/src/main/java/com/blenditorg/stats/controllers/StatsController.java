@@ -48,6 +48,8 @@ public class StatsController {
                 ((java.sql.Date) r[0]).toLocalDate(),
                 ((Number) r[1]).longValue()))
             .toList();
+        
+        System.out.println("hi");
 
         return ResponseEntity.ok(new RenderStatsDto(totalFrames, last7Days, last30Days, last7Breakdown, last30Breakdown));
 		

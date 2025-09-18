@@ -73,5 +73,6 @@ public class ProjectAndFrameService {
 	
 	public void sendRenderStats(FrameMessage msg) {
 		amqpTemplate.convertAndSend(RabbitConfig.RENDER_STATS_QUEUE, msg);
+		amqpTemplate.convertAndSend(RabbitConfig.RENDER_STATS_QUEUE ,msg);
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +39,7 @@ public class DownloaderController {
 
 
 
-	@GetMapping("/download")
+	@PostMapping("/download")
 	public ResponseEntity<Map<String, Object>> downloadFinishedProject(
 			@RequestBody ProjectFileDto projectFileDto,
 			HttpServletRequest request) {
@@ -48,12 +48,15 @@ public class DownloaderController {
 		
 		ProjectFile projectFile = projectFileRepository.findByProjectId(projectFileDto.getProjectId()).get();
 		
+		System.out.println("Project Id: " + projectFile);
+		
 		if (!projectFile.isRenderingDone()) {
 			return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
 		}
 		
 		try {
 			String url = zipFileGenerator.generateDownloadUrlForZip(userId, projectFile.getProjectId());
+			System.out.println("presigned url" + url);
 			return ResponseEntity.ok(Map.of("url", url));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
