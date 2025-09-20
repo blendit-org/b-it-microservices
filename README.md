@@ -1,3 +1,6 @@
+<img width="2717" height="1506" alt="image" src="https://github.com/user-attachments/assets/4d7534cc-0b9a-49ff-a0ce-5872af4bdbac" />
+
+
 # Authentication & User Management API
 ## Authentication
 ### 1. Sign Up
@@ -132,5 +135,6 @@ Authorization: Bearer <token>
   }
 ]
 ```
+
 
 
