@@ -1,4 +1,5 @@
-<img width="2717" height="1506" alt="image" src="https://github.com/user-attachments/assets/4d7534cc-0b9a-49ff-a0ce-5872af4bdbac" />
+<img width="2717" height="1506" alt="image" src="https://github.com/user-attachments/assets/2fd0ed90-4f68-4c49-8e01-0a013e63c2bf" />
+
 
 # REST API's
 
@@ -56,3 +57,4 @@ workerHandler: workers hit this for job request, when finished job - requests fo
         POST:   http://localhost:4001/api/worker/job-request
         GET:    http://localhost:4001/api/worker/image-upload
         POST:   http://localhost:4001/api/worker/job-success
+
