@@ -1,5 +1,9 @@
 package com.blenditorg.projectFileManager.entities;
 
+import java.sql.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -36,6 +40,10 @@ public class ProjectFile {
 	
 	@Column(nullable = false)
 	private Integer endFrame;
+	
+	@CreationTimestamp
+	@Column(updatable = false)
+	private Date createdAt;
 	
 	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean pushedIntoQueue;

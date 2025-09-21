@@ -61,7 +61,7 @@ public class FileController {
 	
 	// tested good
 	@GetMapping("/all")
-	public ResponseEntity<Map<String, Object>> getAllProjects(HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getAllProjectsForThisUser(HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization").substring(7);
 		String userId = (String) jwtService.extractAllClaims(token).get("userId");
@@ -70,6 +70,12 @@ public class FileController {
 		
 		return ResponseEntity.ok(Map.of(
 				"files", allFiles));
+	}
+	
+	@GetMapping("/")
+	public ResponseEntity<Map<String, Object>> gellAllProjectsCount() {
+		long count = fileRepository.count();
+		return ResponseEntity.ok(Map.of("totalProjects", count));
 	}
 	
 	/**	

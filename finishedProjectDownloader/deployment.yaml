@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finished-project-downloader
+  namespace: default
+  labels:
+    app: finished-project-downloader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finished-project-downloader
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: finished-project-downloader
+    spec:
+      containers:
+      - name: finished-project-downloader
+        image: gcr.io/blendit-jackfruit/finished-project-downloader-0.0.1
+        imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: finished-project-downloader-config-9zkc
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: finished-project-downloader-config-9zkc
+              key: DB_PASSWORD
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: finished-project-downloader-config-9zkc
+              key: JWT_SECRET_KEY
+        - name: JWT_EXPIRATION_TIME
+          valueFrom:
+            configMapKeyRef:
+              name: finished-project-downloader-config-9zkc
+              key: JWT_EXPIRATION_TIME
+        resources:
+          requests:
+            cpu: 50m       # lower CPU request
+            memory: 64Mi     # lower memory request
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW

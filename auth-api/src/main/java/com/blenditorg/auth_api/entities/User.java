@@ -44,18 +44,28 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	private long score;
 	
-//	@Column(nullable = false)
-//	private boolean isVerified;
-//	
-//	
-//	
-//	public boolean isVerified() {
-//		return isVerified;
-//	}
-//
-//	public void setVerified(boolean isVerified) {
-//		this.isVerified = isVerified;
-//	}
+	@Column(nullable = false)
+	private boolean isVerified;
+	
+	@Column(name = "verification_code")
+	private long verificationCode;
+	
+	@JsonIgnore
+	public long getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(long verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
 
 	public long getScore() {
 		return score;

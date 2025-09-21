@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blenditorg.auth_api.dtos.LoginUserDto;
 import com.blenditorg.auth_api.dtos.RegisterUserDto;
+import com.blenditorg.auth_api.dtos.VerificationDto;
+import com.blenditorg.auth_api.dtos.VerificationRequestDto;
 import com.blenditorg.auth_api.entities.User;
 import com.blenditorg.auth_api.responses.LoginResponse;
 import com.blenditorg.auth_api.services.AuthenticationService;
 import com.blenditorg.auth_api.services.JwtService;
 import com.blenditorg.auth_api.services.MailService;
+import com.blenditorg.auth_api.services.VerificationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,15 +31,11 @@ public class AuthenticationController {
 	
 	private final AuthenticationService authenticationService;
 	
+	private final VerificationService verificationService;
+	
 	//private final MailService mailService;
 	
-	public AuthenticationController(
-			JwtService jwtService, 
-			AuthenticationService authenticationService
-			) {
-		this.authenticationService = authenticationService;
-		this.jwtService = jwtService;
-	}
+	
 	
 //	@PostMapping("/signup")
 //	public ResponseEntity<Map<String, Object>> signup(@RequestBody RegisterUserDto registerUserDto) {
@@ -50,6 +49,14 @@ public class AuthenticationController {
 //		
 //	}
 	
+	public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService,
+			VerificationService verificationService) {
+		super();
+		this.jwtService = jwtService;
+		this.authenticationService = authenticationService;
+		this.verificationService = verificationService;
+	}
+	
 	@PostMapping("/signup")
 	public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
 		
@@ -60,6 +67,8 @@ public class AuthenticationController {
 		return ResponseEntity.ok(registeredUser);
 	}
 	
+	
+
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
 		
@@ -96,8 +105,16 @@ public class AuthenticationController {
 		return ResponseEntity.ok("Logged out successfully");
 	}
 	
-//	@PostMapping("/verify")
-//	public ResponseEntity<Map<String, Object>> verifyEmail(@RequestBody LoginUserDto loginUserDto) {
-//		
-//	}
+	@PostMapping("/verify")
+	public ResponseEntity<Map<String, Object>> verificationRequest(@RequestBody VerificationRequestDto verificationDto) {
+		verificationService.verificationCodeSent(verificationDto.getEmail());
+		return ResponseEntity.ok(Map.of("message", "Verification code sent"));
+	}
+	
+	@PostMapping("/verify/confirm")
+	public ResponseEntity<Map<String, Object>> verifyEmail(@RequestBody VerificationDto verificationDto) {
+		verificationService.verificationCodeMatches(verificationDto.getEmail(), verificationDto.getVerificationCode());
+		return ResponseEntity.ok(Map.of("message", "Verification code matches"));
+	}
+	
 }
