@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-handler
+  namespace: default
+  labels:
+    app: worker-handler
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: worker-handler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: worker-handler
+    spec:
+      containers:
+      - name: worker-handler
+        image: gcr.io/blendit-jackfruit/worker-handler-0.0.1
+        imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: worker-handler-config-dw1f
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: worker-handler-config-dw1f
+              key: DB_PASSWORD
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: worker-handler-config-dw1f
+              key: JWT_SECRET_KEY
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW

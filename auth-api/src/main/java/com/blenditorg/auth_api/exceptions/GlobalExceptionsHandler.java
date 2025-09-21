@@ -64,6 +64,22 @@ public class GlobalExceptionsHandler {
 		return errorDetail;
 	}
 	
+	@ExceptionHandler(UserNotVerifiedError.class)
+	public ProblemDetail handleUserNotVerifiedError(UsernameAlreadyExists exception) {
+		errorDetail = ProblemDetail
+				.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+		errorDetail.setProperty("description", "This user is not verified");
+		return errorDetail;
+	}
+	
+	@ExceptionHandler(VerificationMismatch.class)
+	public ProblemDetail handleVerificationMismatch(UsernameAlreadyExists exception) {
+		errorDetail = ProblemDetail
+				.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+		errorDetail.setProperty("description", "Verification code does not match");
+		return errorDetail;
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ProblemDetail handleAllOtherExceptions(Exception exception) {
 		errorDetail = ProblemDetail
@@ -71,4 +87,6 @@ public class GlobalExceptionsHandler {
 		errorDetail.setProperty("description", "Internal server error");
 		return errorDetail;
 	}
+	
+	
 }

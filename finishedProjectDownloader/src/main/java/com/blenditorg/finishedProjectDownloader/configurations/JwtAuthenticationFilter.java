@@ -3,8 +3,10 @@ package com.blenditorg.finishedProjectDownloader.configurations;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatusCode;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -70,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			System.out.println("[debug] first filter chain: no Bearer token");
 			filterChain.doFilter(request, response);
-			return;
+			throw new HttpClientErrorException(HttpStatusCode.valueOf(403), "No authentication header");
 		}
 		
 		try {

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.blenditorg</groupId>
 	<artifactId>renderProgressInfo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>renderProgressInfo</name>
 	<description>All API&apos;s related to getting user project information</description>
 	<url/>
