@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stats
+  namespace: default
+  labels:
+    app: stats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stats
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: stats
+    spec:
+      containers:
+      - name: stats
+        image: gcr.io/blendit-jackfruit/stats:0.0.2
+        imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: stats-config-3sjo
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: stats-config-3sjo
+              key: DB_PASSWORD
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
